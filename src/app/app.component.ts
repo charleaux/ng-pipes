@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  appStatus = new Promise((resolve, reject) => {
+    setTimeout(params => {
+      resolve('stable');
+    }, 2000);
+  });
   servers = [
     {
       instanceType: 'medium',
-      name: 'Production Server',
+      name: 'Production',
       status: 'stable',
       started: new Date(2017, 1, 17)
     },
@@ -32,6 +37,7 @@ export class AppComponent {
       started: new Date(2017, 1, 17)
     }
   ];
+  filteredStatus: string;
   getStatusClasses(server: {
     instanceType: string;
     name: string;
@@ -43,5 +49,16 @@ export class AppComponent {
       'list-group-item-warning': server.status === 'offline',
       'list-group-item-danger': server.status === 'critical'
     };
+  }
+
+  ngOnInit(): void {}
+
+  onAddServer() {
+    this.servers.push({
+      instanceType: 'small',
+      name: 'new server',
+      status: 'stable',
+      started: new Date(2018, 1, 17)
+    });
   }
 }
